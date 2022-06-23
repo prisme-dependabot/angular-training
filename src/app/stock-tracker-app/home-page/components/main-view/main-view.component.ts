@@ -7,7 +7,7 @@ import { SynthetisedStock } from "../../../../shared/models/stocks/SynthetisedSt
   styleUrls: ["./main-view.component.scss"],
 })
 export class MainViewComponent implements OnInit {
-  synthetisedStocks: SynthetisedStock[] = [{ prout: "porut" }];
+  synthetisedStocks: SynthetisedStock[] = [];
 
   constructor() {}
 
