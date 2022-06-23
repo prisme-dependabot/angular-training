@@ -1,5 +1,6 @@
 import { Component, OnInit } from "@angular/core";
-import { SynthetisedStock } from "../../../../shared/models/stocks/SynthetisedStock";
+import { Stock } from "../../../../shared/models/stocks/Stock";
+import { QuoteData } from "../../../../shared/models/stocks/QuoteData";
 
 @Component({
   selector: "home-page",
@@ -7,7 +8,17 @@ import { SynthetisedStock } from "../../../../shared/models/stocks/SynthetisedSt
   styleUrls: ["./main-view.component.scss"],
 })
 export class MainViewComponent implements OnInit {
-  synthetisedStocks: SynthetisedStock[] = [];
+  stocks: Stock[] = [
+    {
+      synthetisedStock: {
+        description: "prout",
+        displaySymbol: "prout",
+        symbol: "TSLA",
+        type: "prout",
+      },
+      quoteData: {} as QuoteData,
+    },
+  ];
 
   constructor() {}
 

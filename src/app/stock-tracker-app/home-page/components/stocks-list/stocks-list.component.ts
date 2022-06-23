@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from "@angular/core";
-import { SynthetisedStock } from "../../../../shared/models/stocks/SynthetisedStock";
+import { Stock } from "../../../../shared/models/stocks/Stock";
 
 @Component({
   selector: "stocks-list",
@@ -7,7 +7,7 @@ import { SynthetisedStock } from "../../../../shared/models/stocks/SynthetisedSt
   styleUrls: ["./stocks-list.component.scss"],
 })
 export class StocksListComponent implements OnInit {
-  @Input() synthetisedStocks: SynthetisedStock[] = [];
+  @Input() stocks: Stock[] = [];
 
   constructor() {}
 

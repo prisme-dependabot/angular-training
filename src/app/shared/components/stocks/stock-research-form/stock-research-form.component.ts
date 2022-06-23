@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { StockService } from "../../../services/stock.service";
+import { StocksService } from "../../../services/stocks.service";
 import {
   AbstractControl,
   FormControl,
@@ -16,7 +16,7 @@ import { onlyLettersValidator } from "../../../validators/only-letters.validator
 export class StockResearchFormComponent implements OnInit {
   stockResearchForm!: FormGroup;
 
-  constructor(private stockService: StockService) {}
+  constructor(private stockService: StocksService) {}
 
   get symbol(): AbstractControl {
     return this.stockResearchForm.get("symbol");
@@ -37,7 +37,6 @@ export class StockResearchFormComponent implements OnInit {
       this.stockService
         .getStockBySymbol(this.stockResearchForm.value.symbol)
         .subscribe((result) => console.log(result));
-
       this.stockResearchForm.reset();
     }
   }

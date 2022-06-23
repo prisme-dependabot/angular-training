@@ -4,17 +4,17 @@ import { QuoteData } from "../models/stocks/QuoteData";
 import { filter, forkJoin, map, Observable } from "rxjs";
 import { SynthetisedStock } from "../models/stocks/SynthetisedStock";
 import { Stock } from "../models/stocks/Stock";
+import { StockEvolution } from "../models/stocks/StockEvolution";
+import { DatePipe } from "@angular/common";
 
 @Injectable({
   providedIn: "root",
 })
-export class StockService {
+export class StocksService {
   FINNHUB_API_URL = "https://finnhub.io/api/v1/";
-  // quote?symbol=AAPL&token=
-  // "https://finnhub.io/api/v1/search?q=apple&token="
-  // curl "https://finnhub.io/api/v1/stock/insider-sentiment?symbol=TSLA&from=2015-01-01&to=2022-03-01&token="
+  DATE_FORMAT = "yyyy-MM-dd";
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private datepipe: DatePipe) {}
 
   getStockBySymbol(stockSymbol: string): Observable<Stock> {
     return forkJoin([
@@ -32,10 +32,6 @@ export class StockService {
         };
       })
     );
-  }
-
-  quoteIsFound(quote: QuoteData): boolean {
-    return !!Object.keys(quote).filter((key) => !!quote[key])?.length;
   }
 
   getQuoteDataByStockSymbol(stockSymbol: string): Observable<QuoteData> {
@@ -68,5 +64,32 @@ export class StockService {
         filter((data) => !!data.count),
         map((data) => data.result)
       );
+  }
+
+  quoteIsFound(quote: QuoteData): boolean {
+    return !!Object.keys(quote).filter((key) => !!quote[key])?.length;
+  }
+
+  getLastThreeMonthsStockSentimentInformationBySymbol(
+    stockSymbol: string
+  ): Observable<StockEvolution> {
+    const currentDate = new Date();
+    return this.http
+      .get<{ data: StockEvolution; symbol: string }>(
+        this.FINNHUB_API_URL + "stock/insider-sentiment",
+        {
+          params: {
+            symbol: stockSymbol,
+            from: this.datepipe.transform(
+              new Date(currentDate.getTime()).setMonth(
+                currentDate.getMonth() - 2
+              ),
+              this.DATE_FORMAT
+            ),
+            to: this.datepipe.transform(currentDate, this.DATE_FORMAT),
+          },
+        }
+      )
+      .pipe(map((retrievedResponse) => retrievedResponse.data));
   }
 }
