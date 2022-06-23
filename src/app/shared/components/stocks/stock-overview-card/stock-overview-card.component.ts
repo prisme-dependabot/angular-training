@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from "@angular/core";
-import { SynthetisedStock } from "../../../models/stocks/SynthetisedStock";
+import { Stock } from "../../../models/stocks/Stock";
 
 @Component({
   selector: "stock-overview-card",
@@ -7,17 +7,9 @@ import { SynthetisedStock } from "../../../models/stocks/SynthetisedStock";
   styleUrls: ["./stock-overview-card.component.scss"],
 })
 export class StockOverviewCardComponent implements OnInit {
-  @Input() synthetisedStock!: SynthetisedStock;
-
-  sentiment!: {
-    symbol: number;
-  };
+  @Input() stock!: Stock;
 
   constructor() {}
 
-  ngOnInit(): void {
-    this.sentiment = {
-      symbol: 100,
-    };
-  }
+  ngOnInit(): void {}
 }

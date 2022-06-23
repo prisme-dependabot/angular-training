@@ -1,1 +1,43 @@
-<p>stock-research-form works!</p>
+<div class="container">
+  <h4>Enter the symbol of a stock to track (i.e AAPL, TSLA, GOOGL)</h4>
+  <form
+    (ngSubmit)="onSubmit()"
+    (keydown.enter)="$event.target.blur(); onSubmit()"
+    [formGroup]="stockResearchForm"
+    class="form-group"
+  >
+    <label for="stock-symbol">Symbol</label>
+    <input
+      class="form-control"
+      formControlName="symbol"
+      id="stock-symbol"
+      maxlength="5"
+      minlength="1"
+      name="stock-symbol"
+      type="text"
+    />
+
+    <div
+      *ngIf="symbol.invalid && (symbol.dirty || symbol.touched)"
+      class="alert alert-danger"
+    >
+      <div *ngIf="symbol.errors?.['required']">
+        Symbol must be at least 1 characters long.
+      </div>
+      <div *ngIf="symbol.errors?.['maxlength']">
+        Symbol can be max 5 characters long.
+      </div>
+      <div *ngIf="symbol.errors?.['onlyLetters']">
+        Symbol must contain only letter(s).
+      </div>
+    </div>
+
+    <button
+      [disabled]="!stockResearchForm.valid"
+      class="btn btn-success"
+      type="submit"
+    >
+      Track Stock
+    </button>
+  </form>
+</div>
