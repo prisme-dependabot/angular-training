@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { StocksService } from "../../../services/stocks.service";
+import { StocksService } from "../../../../core/services/stocks.service";
 import {
   AbstractControl,
   FormControl,
@@ -37,6 +37,7 @@ export class StockResearchFormComponent implements OnInit {
       this.stockService
         .getStockBySymbol(this.stockResearchForm.value.symbol)
         .subscribe((result) => console.log(result));
+      document.getElementById("stock-symbol").blur();
       this.stockResearchForm.reset();
     }
   }

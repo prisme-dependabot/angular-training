@@ -6,9 +6,16 @@ import { AppRoutingModule } from "./app-routing.module";
 import { APP_BASE_HREF } from "@angular/common";
 import { HttpClientModule } from "@angular/common/http";
 import { HomePageModule } from "./stock-tracker-app/home-page/home-page.module";
+import { CoreModule } from "./core/core.module";
 
 @NgModule({
-  imports: [BrowserModule, AppRoutingModule, HttpClientModule, HomePageModule],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    CoreModule,
+    HttpClientModule,
+    HomePageModule,
+  ],
   declarations: [AppComponent],
   bootstrap: [AppComponent],
   providers: [{ provide: APP_BASE_HREF, useValue: "/" }],

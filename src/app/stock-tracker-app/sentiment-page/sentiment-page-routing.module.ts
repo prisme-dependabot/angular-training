@@ -1,7 +1,7 @@
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
 import { SentimentPageComponent } from "./components/sentiment-page/sentiment-page.component";
-import { StocksResolverService } from "../../shared/resolvers/stocks-resolver.service";
+import { StocksResolverService } from "../../core/resolvers/stocks-resolver.service";
 
 export const routes: Routes = [
   {

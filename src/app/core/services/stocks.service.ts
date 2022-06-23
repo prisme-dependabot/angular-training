@@ -1,15 +1,13 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
-import { QuoteData } from "../models/stocks/QuoteData";
+import { QuoteData } from "../../shared/models/stocks/QuoteData";
 import { filter, forkJoin, map, Observable } from "rxjs";
-import { SynthetisedStock } from "../models/stocks/SynthetisedStock";
-import { Stock } from "../models/stocks/Stock";
-import { StockEvolution } from "../models/stocks/StockEvolution";
+import { SynthetisedStock } from "../../shared/models/stocks/SynthetisedStock";
+import { Stock } from "../../shared/models/stocks/Stock";
+import { StockEvolution } from "../../shared/models/stocks/StockEvolution";
 import { DatePipe } from "@angular/common";
 
-@Injectable({
-  providedIn: "root",
-})
+@Injectable()
 export class StocksService {
   FINNHUB_API_URL = "https://finnhub.io/api/v1/";
   DATE_FORMAT = "yyyy-MM-dd";
