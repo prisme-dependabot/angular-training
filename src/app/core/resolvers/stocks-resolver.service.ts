@@ -5,7 +5,7 @@ import {
   Resolve,
   RouterStateSnapshot,
 } from "@angular/router";
-import { StockEvolution } from "../models/stocks/StockEvolution";
+import { StockEvolution } from "../../shared/models/stocks/StockEvolution";
 import { StocksService } from "../services/stocks.service";
 
 @Injectable({
