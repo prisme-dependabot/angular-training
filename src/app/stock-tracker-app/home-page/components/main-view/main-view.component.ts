@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { Stock } from "../../../../shared/models/stocks/Stock";
-import { QuoteData } from "../../../../shared/models/stocks/QuoteData";
+import { StocksLocalStorageCacheService } from "../../../../core/services/stocks-local-storage-cache.service";
 
 @Component({
   selector: "home-page",
@@ -8,19 +8,21 @@ import { QuoteData } from "../../../../shared/models/stocks/QuoteData";
   styleUrls: ["./main-view.component.scss"],
 })
 export class MainViewComponent implements OnInit {
-  stocks: Stock[] = [
-    {
-      synthetisedStock: {
-        description: "prout",
-        displaySymbol: "prout",
-        symbol: "TSLA",
-        type: "prout",
-      },
-      quoteData: {} as QuoteData,
-    },
-  ];
+  stocks: Stock[] = [];
 
-  constructor() {}
+  constructor(
+    private stocksLocalStorageCacheService: StocksLocalStorageCacheService
+  ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.stocksLocalStorageCacheService
+      .getRecordedStocks()
+      .subscribe((recordedStocks) => {
+        this.stocks = recordedStocks;
+      });
+  }
+
+  deleteStock(index: number): void {
+    this.stocksLocalStorageCacheService.deleteStock(index);
+  }
 }

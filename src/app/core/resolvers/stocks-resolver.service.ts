@@ -1,28 +1,34 @@
 import { Injectable } from "@angular/core";
-import { Observable } from "rxjs";
+import { Observable, of } from "rxjs";
 import {
   ActivatedRouteSnapshot,
   Resolve,
   RouterStateSnapshot,
 } from "@angular/router";
-import { StockEvolution } from "../../shared/models/stocks/StockEvolution";
 import { StocksService } from "../services/stocks.service";
+import { Sentiment } from "../../shared/models/stocks/Sentiment";
+import { StocksLocalStorageCacheService } from "../services/stocks-local-storage-cache.service";
+import { Stock } from "../../shared/models/stocks/Stock";
 
-@Injectable({
-  providedIn: "root",
-})
-export class StocksResolverService implements Resolve<StockEvolution> {
-  FINNHUB_API_URL = "https://finnhub.io/api/v1/";
-
-  constructor(private stocksService: StocksService) {}
+@Injectable()
+export class StocksResolverService implements Resolve<Sentiment[]> {
+  constructor(
+    private stocksService: StocksService,
+    private stocksLocalStorageCacheService: StocksLocalStorageCacheService
+  ) {}
 
   resolve(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
-  ): Observable<StockEvolution> | Promise<StockEvolution> | StockEvolution {
-    console.log(route.paramMap.get("symbol"));
+  ): Observable<Sentiment[]> | Promise<Sentiment[]> | Sentiment[] {
+    const symbol: string = route.paramMap.get("symbol");
+    const recordedStock: Stock =
+      this.stocksLocalStorageCacheService.getRecordedStockValueBySymbol(symbol);
+    if (recordedStock && recordedStock.sentimentCached) {
+      return of(recordedStock.sentimentInformation);
+    }
     return this.stocksService.getLastThreeMonthsStockSentimentInformationBySymbol(
-      route.paramMap.get("symbol")
+      symbol
     );
   }
 }

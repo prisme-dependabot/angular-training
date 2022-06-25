@@ -38,5 +38,9 @@
     >
       Track Stock
     </button>
+
+    <div class="alert" *ngIf="noStockFound">
+      No stock found with this symbol.
+    </div>
   </form>
 </div>

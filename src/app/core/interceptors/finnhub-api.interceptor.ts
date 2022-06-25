@@ -8,11 +8,9 @@ import {
 } from "@angular/common/http";
 import { Observable } from "rxjs";
 
-@Injectable({
-  providedIn: "root",
-})
+@Injectable()
 export class FinnhubApiInterceptor implements HttpInterceptor {
-  FINHUB_API_TOKEN = "bu4f8kn48v6uehqi3cqg";
+  private FINHUB_API_TOKEN = "bu4f8kn48v6uehqi3cqg";
 
   intercept(
     req: HttpRequest<any>,

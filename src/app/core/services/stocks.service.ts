@@ -2,33 +2,34 @@ import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { QuoteData } from "../../shared/models/stocks/QuoteData";
 import { filter, forkJoin, map, Observable } from "rxjs";
-import { SynthetisedStock } from "../../shared/models/stocks/SynthetisedStock";
+import { StockMainInformation } from "../../shared/models/stocks/StockMainInformation";
 import { Stock } from "../../shared/models/stocks/Stock";
-import { StockEvolution } from "../../shared/models/stocks/StockEvolution";
 import { DatePipe } from "@angular/common";
+import { Sentiment } from "../../shared/models/stocks/Sentiment";
+import { DATE_FORMAT } from "../../shared/constants/formats/date-format";
 
 @Injectable()
 export class StocksService {
-  FINNHUB_API_URL = "https://finnhub.io/api/v1/";
-  DATE_FORMAT = "yyyy-MM-dd";
+  private FINNHUB_API_URL = "https://finnhub.io/api/v1/";
 
   constructor(private http: HttpClient, private datepipe: DatePipe) {}
 
   getStockBySymbol(stockSymbol: string): Observable<Stock> {
     return forkJoin([
       this.getQuoteDataByStockSymbol(stockSymbol),
-      this.getSynthetisedStockBySymbol(stockSymbol),
+      this.getStockMainInformationBySymbol(stockSymbol),
     ]).pipe(
       filter(
         (retrievedStock) =>
-          this.quoteIsFound(retrievedStock[0]) && !!retrievedStock[1]
+          // this.quoteIsFound(retrievedStock[0]) &&
+          !!retrievedStock[1]
       ),
-      map((retrievedStock) => {
-        return {
-          quoteData: retrievedStock[0],
-          synthetisedStock: retrievedStock[1],
-        };
-      })
+      map((retrievedStock) =>
+        this.fromQuoteDataAndStockMainInformationToStock(
+          retrievedStock[0],
+          retrievedStock[1]
+        )
+      )
     );
   }
 
@@ -40,17 +41,19 @@ export class StocksService {
     });
   }
 
-  getSynthetisedStockBySymbol(
+  getStockMainInformationBySymbol(
     stockSymbol: string
-  ): Observable<SynthetisedStock> {
-    return this.getSynthetisedStocksByQuery(stockSymbol).pipe(
+  ): Observable<StockMainInformation> {
+    return this.getStocksMainInformationByQuery(stockSymbol).pipe(
       map((stocks) => stocks.find((stock) => stock.symbol === stockSymbol))
     );
   }
 
-  getSynthetisedStocksByQuery(query: string): Observable<SynthetisedStock[]> {
+  getStocksMainInformationByQuery(
+    query: string
+  ): Observable<StockMainInformation[]> {
     return this.http
-      .get<{ count: number; result: SynthetisedStock[] }>(
+      .get<{ count: number; result: StockMainInformation[] }>(
         this.FINNHUB_API_URL + "search",
         {
           params: {
@@ -65,15 +68,16 @@ export class StocksService {
   }
 
   quoteIsFound(quote: QuoteData): boolean {
+    // TODO : faut-il vraiment check ça?
     return !!Object.keys(quote).filter((key) => !!quote[key])?.length;
   }
 
   getLastThreeMonthsStockSentimentInformationBySymbol(
     stockSymbol: string
-  ): Observable<StockEvolution> {
+  ): Observable<Sentiment[]> {
     const currentDate = new Date();
     return this.http
-      .get<{ data: StockEvolution; symbol: string }>(
+      .get<{ data: Sentiment[]; symbol: string }>(
         this.FINNHUB_API_URL + "stock/insider-sentiment",
         {
           params: {
@@ -82,12 +86,28 @@ export class StocksService {
               new Date(currentDate.getTime()).setMonth(
                 currentDate.getMonth() - 2
               ),
-              this.DATE_FORMAT
+              DATE_FORMAT
             ),
-            to: this.datepipe.transform(currentDate, this.DATE_FORMAT),
+            to: this.datepipe.transform(currentDate, DATE_FORMAT),
           },
         }
       )
       .pipe(map((retrievedResponse) => retrievedResponse.data));
+  }
+
+  private fromQuoteDataAndStockMainInformationToStock(
+    quoteData: QuoteData,
+    stockMainInformation: StockMainInformation
+  ): Stock {
+    return {
+      symbol: stockMainInformation.symbol,
+      companyName: stockMainInformation.description,
+      currentPrice: quoteData?.c,
+      highPriceOfTheDay: quoteData?.h,
+      openPriceOfTheDay: quoteData?.o,
+      percentChange: quoteData?.dp,
+      sentimentInformation: [],
+      sentimentCached: false,
+    };
   }
 }

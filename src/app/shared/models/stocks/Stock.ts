@@ -1,7 +1,12 @@
-import { SynthetisedStock } from "./SynthetisedStock";
-import { QuoteData } from "./QuoteData";
+import { Sentiment } from "./Sentiment";
 
 export interface Stock {
-  synthetisedStock: SynthetisedStock;
-  quoteData: QuoteData;
+  symbol: string;
+  companyName: string;
+  currentPrice: number;
+  percentChange: number;
+  highPriceOfTheDay: number;
+  openPriceOfTheDay: number;
+  sentimentInformation?: Sentiment[];
+  sentimentCached?: boolean;
 }

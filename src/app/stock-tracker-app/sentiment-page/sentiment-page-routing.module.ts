@@ -8,7 +8,7 @@ export const routes: Routes = [
     path: ":symbol",
     component: SentimentPageComponent,
     resolve: {
-      resolvedStockEvolution: StocksResolverService,
+      resolvedSentimentInformation: StocksResolverService,
     },
   },
 ];

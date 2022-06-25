@@ -1,0 +1,6 @@
+<ng-container *ngFor="let stock of stocks; index as i; trackBy: trackBySymbol">
+  <stock-overview-card
+    [stock]="stock"
+    (deleteButton)="deleteStock(i)"
+  ></stock-overview-card>
+</ng-container>

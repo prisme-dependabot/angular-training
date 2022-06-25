@@ -1,4 +1,4 @@
-export interface SynthetisedStock {
+export interface StockMainInformation {
   description: string;
   displaySymbol: string;
   symbol: string;

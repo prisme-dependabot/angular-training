@@ -1,12 +1,13 @@
 import { Component, OnInit } from "@angular/core";
-import { StocksService } from "../../../../core/services/stocks.service";
+import { StocksService } from "../../../../../core/services/stocks.service";
 import {
   AbstractControl,
   FormControl,
   FormGroup,
   Validators,
 } from "@angular/forms";
-import { onlyLettersValidator } from "../../../validators/only-letters.validator";
+import { onlyLettersValidator } from "../../../../../shared/validators/only-letters.validator";
+import { StocksLocalStorageCacheService } from "../../../../../core/services/stocks-local-storage-cache.service";
 
 @Component({
   selector: "stock-research-form",
@@ -15,8 +16,12 @@ import { onlyLettersValidator } from "../../../validators/only-letters.validator
 })
 export class StockResearchFormComponent implements OnInit {
   stockResearchForm!: FormGroup;
+  noStockFound = false;
 
-  constructor(private stockService: StocksService) {}
+  constructor(
+    private stockService: StocksService,
+    private stocksLocalStorageCacheService: StocksLocalStorageCacheService
+  ) {}
 
   get symbol(): AbstractControl {
     return this.stockResearchForm.get("symbol");
@@ -35,8 +40,11 @@ export class StockResearchFormComponent implements OnInit {
   onSubmit(): void {
     if (this.stockResearchForm.valid) {
       this.stockService
-        .getStockBySymbol(this.stockResearchForm.value.symbol)
-        .subscribe((result) => console.log(result));
+        .getStockBySymbol(this.stockResearchForm.value.symbol.toUpperCase())
+        .subscribe((stock) => {
+          this.stocksLocalStorageCacheService.postRetrievedStock(stock);
+        });
+      //  TODO: add catch erro to display message
       document.getElementById("stock-symbol").blur();
       this.stockResearchForm.reset();
     }
