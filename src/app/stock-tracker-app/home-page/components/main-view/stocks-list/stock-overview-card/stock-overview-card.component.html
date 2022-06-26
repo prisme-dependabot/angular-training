@@ -1,4 +1,24 @@
-<p>stock-overview-card works!</p>
-<div (click)="deleteButtonEmit()">delete</div>
+<box-style
+  [title]="cardTitle"
+  [showDeleteOption]="true"
+  (deletionPerformed)="deleteButtonEmit()"
+>
+  <div class="row">
+    <div class="col-6">
+      Change today : {{ stock.percentChange | number: "1.1-1" }}%
+    </div>
+    <!--    TO DO : utiliser pipe pour les + et - -->
+    <div class="col-6">
+      Opening price : {{ stock.openPriceOfTheDay | currency }}
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-6">Current price : {{ stock.currentPrice | currency }}</div>
+    <!--    TO DO : utiliser pipe pour les + et - -->
+    <div class="col-6">
+      High price : {{ stock.highPriceOfTheDay | currency }}
+    </div>
+  </div>
 
-<a [routerLink]="['/sentiment', stock.symbol]">test routing</a>
+  <a [routerLink]="['/sentiment', stock.symbol]">test routing</a>
+</box-style>

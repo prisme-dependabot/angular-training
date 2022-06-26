@@ -1,46 +1,57 @@
-<div class="container">
-  <h4>Enter the symbol of a stock to track (i.e AAPL, TSLA, GOOGL)</h4>
-  <form
-    (ngSubmit)="onSubmit()"
-    [formGroup]="stockResearchForm"
-    class="form-group"
-  >
-    <label for="stock-symbol">Symbol</label>
-    <input
-      class="form-control"
-      formControlName="symbol"
-      id="stock-symbol"
-      maxlength="5"
-      minlength="1"
-      name="stock-symbol"
-      type="text"
-    />
-
-    <div
-      *ngIf="symbol.invalid && (symbol.dirty || symbol.touched)"
-      class="alert alert-danger"
+<box-style
+  [title]="'Enter the symbol of a stock to track (i.e AAPL, TSLA, GOOGL)'"
+>
+  <div class="container">
+    <form
+      (ngSubmit)="onSubmit()"
+      [formGroup]="stockResearchForm"
+      class="form-group"
     >
-      <div *ngIf="symbol.errors?.['required']">
-        Symbol must be at least 1 characters long.
-      </div>
-      <div *ngIf="symbol.errors?.['maxlength']">
-        Symbol can be max 5 characters long.
-      </div>
-      <div *ngIf="symbol.errors?.['onlyLetters']">
-        Symbol must contain only letter(s).
-      </div>
-    </div>
+      <div class="row">
+        <div class="col">
+          <label for="stock-symbol" class="form-label">Symbol</label>
+          <input
+            class="form-control"
+            formControlName="symbol"
+            id="stock-symbol"
+            maxlength="5"
+            minlength="1"
+            name="stock-symbol"
+            type="text"
+          />
+          <!--          TODO : extraire input-->
 
-    <button
-      [disabled]="!stockResearchForm.valid"
-      class="btn btn-success"
-      type="submit"
-    >
-      Track Stock
-    </button>
+          <div
+            *ngIf="symbol.invalid && (symbol.dirty || symbol.touched)"
+            class="alert alert-danger"
+          >
+            <div *ngIf="symbol.errors?.['required']">
+              Symbol must be at least 1 characters long.
+            </div>
+            <div *ngIf="symbol.errors?.['maxlength']">
+              Symbol can be max 5 characters long.
+            </div>
+            <div *ngIf="symbol.errors?.['onlyLetters']">
+              Symbol must contain only letter(s).
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-4">
+          <button
+            [disabled]="!stockResearchForm.valid"
+            class="btn btn-success"
+            type="submit"
+          >
+            Track Stock
+          </button>
+        </div>
+      </div>
 
-    <div class="alert" *ngIf="noStockFound">
-      No stock found with this symbol.
-    </div>
-  </form>
-</div>
+      <div class="alert" *ngIf="noStockFound">
+        No stock found with this symbol.
+      </div>
+    </form>
+  </div>
+</box-style>
