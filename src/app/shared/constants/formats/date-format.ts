@@ -1,1 +1,1 @@
-export const DATE_FORMAT = "yyyy-MM-dd";
+export const FULL_DATE_FORMAT = "yyyy-MM-dd";

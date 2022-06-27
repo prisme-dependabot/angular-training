@@ -6,7 +6,7 @@ import { StockMainInformation } from "../../shared/models/stocks/StockMainInform
 import { Stock } from "../../shared/models/stocks/Stock";
 import { DatePipe } from "@angular/common";
 import { Sentiment } from "../../shared/models/stocks/Sentiment";
-import { DATE_FORMAT } from "../../shared/constants/formats/date-format";
+import { FULL_DATE_FORMAT } from "../../shared/constants/formats/date-format";
 
 @Injectable()
 export class StocksService {
@@ -86,9 +86,9 @@ export class StocksService {
               new Date(currentDate.getTime()).setMonth(
                 currentDate.getMonth() - 2
               ),
-              DATE_FORMAT
+              FULL_DATE_FORMAT
             ),
-            to: this.datepipe.transform(currentDate, DATE_FORMAT),
+            to: this.datepipe.transform(currentDate, FULL_DATE_FORMAT),
           },
         }
       )

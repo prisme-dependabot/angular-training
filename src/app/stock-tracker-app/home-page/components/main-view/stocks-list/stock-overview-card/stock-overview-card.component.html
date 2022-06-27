@@ -4,21 +4,43 @@
   (deletionPerformed)="deleteButtonEmit()"
 >
   <div class="row">
-    <div class="col-6">
-      Change today : {{ stock.percentChange | number: "1.1-1" }}%
+    <div class="col-8">
+      <div class="row">
+        <div class="col-6">
+          Change today : {{ stock.percentChange | customPercent }}
+        </div>
+        <div class="col-6">
+          Opening price :
+          {{
+            stock.openPriceOfTheDay | currency: CURRENCY_SYMBOL:"symbol":"1.0-0"
+          }}
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-6">
+          Current price :
+          {{ stock.currentPrice | currency: CURRENCY_SYMBOL:"symbol":"1.0-0" }}
+        </div>
+        <div class="col-6">
+          High price :
+          {{
+            stock.highPriceOfTheDay | currency: CURRENCY_SYMBOL:"symbol":"1.0-0"
+          }}
+        </div>
+      </div>
     </div>
-    <!--    TO DO : utiliser pipe pour les + et - -->
-    <div class="col-6">
-      Opening price : {{ stock.openPriceOfTheDay | currency }}
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-6">Current price : {{ stock.currentPrice | currency }}</div>
-    <!--    TO DO : utiliser pipe pour les + et - -->
-    <div class="col-6">
-      High price : {{ stock.highPriceOfTheDay | currency }}
+    <div class="col-4">
+      <up-arrow *ngIf="positiveCurrentTrend()"></up-arrow>
+      <down-arrow *ngIf="negativeCurrentTrend()"></down-arrow>
     </div>
   </div>
 
-  <a [routerLink]="['/sentiment', stock.symbol]">test routing</a>
+  <div class="row">
+    <div class="col-4 mt-3 mb-3">
+      <navigation-button
+        [routerLink]="['/sentiment', stock.symbol]"
+        [text]="'Go to social sentiment details >'"
+      ></navigation-button>
+    </div>
+  </div>
 </box-style>

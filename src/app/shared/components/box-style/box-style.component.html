@@ -1,15 +1,17 @@
-<div class="container mx-auto mt-3">
+<div class="container mx-auto mt-3 pt-1 pb-1">
   <div class="row justify-content-md-center">
     <div class="col-10 pt-3 border border-3 border border-secondary">
       <div class="row mx-auto">
         <div class="col-10">
           <h4>{{ title }}</h4>
         </div>
-        <div *ngIf="showDeleteOption" class="col-2" (click)="deleting()">
-          Delete
+        <div *ngIf="showDeleteOption" class="col-2 mr-0">
+          <delete-button (deletionPerformed)="deleting()"></delete-button>
         </div>
       </div>
-      <ng-content></ng-content>
+      <div class="col">
+        <ng-content></ng-content>
+      </div>
     </div>
   </div>
 </div>

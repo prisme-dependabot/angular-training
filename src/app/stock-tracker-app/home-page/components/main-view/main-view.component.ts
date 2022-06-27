@@ -21,8 +21,4 @@ export class MainViewComponent implements OnInit {
         this.stocks = recordedStocks;
       });
   }
-
-  deleteStock(index: number): void {
-    this.stocksLocalStorageCacheService.deleteStock(index);
-  }
 }

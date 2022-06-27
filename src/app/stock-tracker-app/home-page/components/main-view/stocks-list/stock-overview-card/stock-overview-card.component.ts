@@ -18,14 +18,27 @@ export class StockOverviewCardComponent implements OnInit {
   @Input() stock: Stock;
   @Output() deleteButton = new EventEmitter();
 
+  CURRENCY_SYMBOL = "USD";
   cardTitle!: string;
 
   constructor() {}
 
   ngOnInit(): void {
+    this.buildCardTitle();
+  }
+
+  buildCardTitle() {
     this.cardTitle = this.stock.companyName.concat(
       " (" + this.stock.symbol + ")"
     );
+  }
+
+  positiveCurrentTrend(): boolean {
+    return this.stock.percentChange > 0;
+  }
+
+  negativeCurrentTrend(): boolean {
+    return this.stock.percentChange < 0;
   }
 
   deleteButtonEmit(): void {

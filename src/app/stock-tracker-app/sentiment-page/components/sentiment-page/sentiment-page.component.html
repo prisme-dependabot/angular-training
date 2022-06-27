@@ -1,3 +1,37 @@
-<p>stock-details works!</p>
+<box-style [title]="cardTitle">
+  <div *ngIf="sentiments?.length > 0; else noSentimentDisplay" class="row">
+    <div *ngFor="let sentiment of sentiments" class="col-4">
+      <div class="row">
+        <div class="col-8">
+          <div class="row">
+            <div class="col">
+              {{ buildSentimentDate(sentiment) | date: "MMMM" | uppercase }}
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              Change: {{ sentiment.change | customNumberSign }}
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">MSPR: {{ sentiment.mspr | number: "1.2-2" }}</div>
+          </div>
+        </div>
+        <div class="col-4">
+          <up-arrow *ngIf="positiveChange(sentiment)"></up-arrow>
+          <down-arrow *ngIf="negativeChange(sentiment)"></down-arrow>
+        </div>
+      </div>
+    </div>
+  </div>
+</box-style>
 
-<a routerLink="/">test routing</a>
+<ng-template #noSentimentDisplay>
+  <p>No sentiment to display!</p>
+</ng-template>
+
+<navigation-button
+  class="navigation-button-position"
+  [routerLink]="'/'"
+  [text]="'< Back to list of stocks'"
+></navigation-button>

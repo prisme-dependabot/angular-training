@@ -1,5 +1,6 @@
-import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { Component, Input } from "@angular/core";
 import { Stock } from "../../../../../shared/models/stocks/Stock";
+import { StocksLocalStorageCacheService } from "../../../../../core/services/stocks-local-storage-cache.service";
 
 @Component({
   selector: "stocks-list",
@@ -8,12 +9,13 @@ import { Stock } from "../../../../../shared/models/stocks/Stock";
 })
 export class StocksListComponent {
   @Input() stocks: Stock[] = [];
-  @Output() deletedStockIndex = new EventEmitter<number>();
 
-  constructor() {}
+  constructor(
+    private stocksLocalStorageCacheService: StocksLocalStorageCacheService
+  ) {}
 
   deleteStock(index: number): void {
-    this.deletedStockIndex.emit(index);
+    this.stocksLocalStorageCacheService.deleteStock(index);
   }
 
   trackBySymbol(index: number, stock: Stock): string {
