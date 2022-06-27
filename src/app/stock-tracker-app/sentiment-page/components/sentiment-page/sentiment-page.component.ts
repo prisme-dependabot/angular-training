@@ -40,9 +40,8 @@ export class SentimentPageComponent implements OnInit {
       this.stocksLocalStorageCacheService.putStock(this.consultedStock);
     }
     this.sentiments = this.consultedStock?.sentimentInformation
-      ?.sort((sentiment) => sentiment.year)
+      ?.sort((sentimentA, sentimentB) => sentimentA.year - sentimentB.year)
       .sort((sentiment) => sentiment.month);
-    // TODO verifie que ca marche bien
   }
 
   buildCardTitle() {

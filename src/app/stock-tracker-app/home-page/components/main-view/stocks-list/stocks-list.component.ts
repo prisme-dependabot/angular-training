@@ -5,7 +5,6 @@ import { StocksLocalStorageCacheService } from "../../../../../core/services/sto
 @Component({
   selector: "stocks-list",
   templateUrl: "./stocks-list.component.html",
-  styleUrls: ["./stocks-list.component.scss"],
 })
 export class StocksListComponent {
   @Input() stocks: Stock[] = [];

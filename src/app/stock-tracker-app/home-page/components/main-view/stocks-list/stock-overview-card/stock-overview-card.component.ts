@@ -11,7 +11,6 @@ import { Stock } from "../../../../../../shared/models/stocks/Stock";
 @Component({
   selector: "stock-overview-card",
   templateUrl: "./stock-overview-card.component.html",
-  styleUrls: ["./stock-overview-card.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class StockOverviewCardComponent implements OnInit {

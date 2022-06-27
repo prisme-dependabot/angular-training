@@ -5,7 +5,6 @@ import { StocksLocalStorageCacheService } from "../../../../core/services/stocks
 @Component({
   selector: "home-page",
   templateUrl: "./main-view.component.html",
-  styleUrls: ["./main-view.component.scss"],
 })
 export class MainViewComponent implements OnInit {
   stocks: Stock[] = [];

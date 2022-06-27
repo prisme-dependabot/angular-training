@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { QuoteData } from "../../shared/models/stocks/QuoteData";
-import { filter, forkJoin, map, Observable } from "rxjs";
+import { filter, forkJoin, map, Observable, throwIfEmpty } from "rxjs";
 import { StockMainInformation } from "../../shared/models/stocks/StockMainInformation";
 import { Stock } from "../../shared/models/stocks/Stock";
 import { DatePipe } from "@angular/common";
@@ -19,17 +19,16 @@ export class StocksService {
       this.getQuoteDataByStockSymbol(stockSymbol),
       this.getStockMainInformationBySymbol(stockSymbol),
     ]).pipe(
-      filter(
-        (retrievedStock) =>
-          // this.quoteIsFound(retrievedStock[0]) &&
-          !!retrievedStock[1]
+      filter((retrievedStock) =>
+        this.stockIsFound(retrievedStock[0], retrievedStock[1])
       ),
       map((retrievedStock) =>
         this.fromQuoteDataAndStockMainInformationToStock(
           retrievedStock[0],
           retrievedStock[1]
         )
-      )
+      ),
+      throwIfEmpty(() => new Error("No stock found with this symbol!"))
     );
   }
 
@@ -67,9 +66,14 @@ export class StocksService {
       );
   }
 
-  quoteIsFound(quote: QuoteData): boolean {
-    // TODO : faut-il vraiment check ça?
-    return !!Object.keys(quote).filter((key) => !!quote[key])?.length;
+  stockIsFound(
+    quote: QuoteData,
+    sotckMainInformation: StockMainInformation
+  ): boolean {
+    return (
+      !!sotckMainInformation &&
+      !!Object.keys(quote).filter((key) => !!quote[key])?.length
+    );
   }
 
   getLastThreeMonthsStockSentimentInformationBySymbol(

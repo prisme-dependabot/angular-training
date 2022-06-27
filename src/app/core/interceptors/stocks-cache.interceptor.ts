@@ -15,7 +15,7 @@ export class StocksCacheInterceptor implements HttpInterceptor {
   ) {}
 
   intercept(
-    req: HttpRequest<any>, // TODO : à typer
+    req: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
     const finnhubApiUrl = "https://finnhub.io/api/v1/";

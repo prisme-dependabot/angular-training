@@ -12,7 +12,6 @@ import { StocksLocalStorageCacheService } from "../../../../../core/services/sto
 @Component({
   selector: "stock-research-form",
   templateUrl: "./stock-research-form.component.html",
-  styleUrls: ["./stock-research-form.component.scss"],
 })
 export class StockResearchFormComponent implements OnInit {
   stockResearchForm!: FormGroup;
@@ -41,12 +40,17 @@ export class StockResearchFormComponent implements OnInit {
     if (this.stockResearchForm.valid) {
       this.stockService
         .getStockBySymbol(this.stockResearchForm.value.symbol.toUpperCase())
-        .subscribe((stock) => {
-          this.stocksLocalStorageCacheService.postRetrievedStock(stock);
+        .subscribe({
+          next: (stock) => {
+            this.stockResearchForm.reset();
+            this.noStockFound = false;
+            this.stocksLocalStorageCacheService.postRetrievedStock(stock);
+          },
+          error: () => {
+            this.noStockFound = true;
+          },
         });
-      //  TODO: add catch erro to display message
       document.getElementById("stock-symbol").blur();
-      this.stockResearchForm.reset();
     }
   }
 }
