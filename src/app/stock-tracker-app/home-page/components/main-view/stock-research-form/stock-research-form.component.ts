@@ -38,19 +38,32 @@ export class StockResearchFormComponent implements OnInit {
 
   onSubmit(): void {
     if (this.stockResearchForm.valid) {
-      this.stockService
-        .getStockBySymbol(this.stockResearchForm.value.symbol.toUpperCase())
-        .subscribe({
-          next: (stock) => {
-            this.stockResearchForm.reset();
-            this.noStockFound = false;
-            this.stocksLocalStorageCacheService.postRetrievedStock(stock);
-          },
-          error: () => {
+      const stockSymbol = this.stockResearchForm.value.symbol.toUpperCase();
+      this.stockService.getStockBySymbol(stockSymbol).subscribe({
+        next: (stock) => {
+          this.resetResearch();
+          this.stocksLocalStorageCacheService.postRetrievedStock(stock);
+        },
+        error: () => {
+          if (this.stockSymbolNotPresentInCache(stockSymbol)) {
             this.noStockFound = true;
-          },
-        });
-      document.getElementById("stock-symbol").blur();
+          } else {
+            this.resetResearch();
+          }
+        },
+      });
     }
+  }
+
+  private resetResearch(): void {
+    document.getElementById("stock-symbol").blur();
+    this.stockResearchForm.reset();
+    this.noStockFound = false;
+  }
+
+  private stockSymbolNotPresentInCache(symbol): boolean {
+    return !this.stocksLocalStorageCacheService.getRecordedStockValueBySymbol(
+      symbol
+    );
   }
 }
